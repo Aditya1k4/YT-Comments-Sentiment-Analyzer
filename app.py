@@ -197,13 +197,24 @@ body, p, span { color: #c7d2fe; }
 watermark_html = "<div class='watermark-bg'>" + ("<span>YOUR INSIGHTS</span>" * 120) + "</div>"
 st.markdown(watermark_html, unsafe_allow_html=True)
 
-# ── Menu Button ─────────────────────────────────────────────
+# ── Hide button on mobile ─────────────────────────────
+st.markdown("""
+<style>
+@media (max-width: 768px) {
+    div[data-testid="column"] button {
+        display: none;
+    }
+}
+</style>
+""", unsafe_allow_html=True)
+
+# ── Menu Button (Desktop only) ────────────────────────
 col1, col2 = st.columns([0.05, 0.95])
 
 with col1:
     if st.button("☰"):
         st.session_state.show_sidebar = not st.session_state.show_sidebar
-        st.rerun()   # 🔥 THIS FIXES IT
+        st.rerun()
 
 # ── Sidebar (Always On - Controlled by page_config) ─────────
 if "youtube_link" not in st.session_state:
