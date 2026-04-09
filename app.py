@@ -1,15 +1,17 @@
 import streamlit as st
 import os
+
 from Senti import (
     extract_video_id, analyze_sentiment,
     bar_chart, plot_sentiment, plot_emotions, EMOTION_META
 )
+
 from YoutubeCommentScrapper import (
     save_video_comments_to_csv, get_channel_info,
     youtube, get_channel_id, get_video_stats
 )
-import streamlit as st
 
+# Mobile detection (simple & correct)
 is_mobile = st.query_params.get("mobile", "0") == "1"
 
 # ── Page config ────────────────────────────────────────────────────────────────
@@ -20,10 +22,9 @@ st.set_page_config(
     page_title='YT Sentiment Insights',
     page_icon='LOGO.png',
     layout='wide',
-    initial_sidebar_state="collapsed" if is_mobile else (
-        "expanded" if st.session_state.show_sidebar else "collapsed"
-    )
+    initial_sidebar_state="expanded" if st.session_state.show_sidebar else "collapsed"
 )
+
 
 # ── Global CSS ─────────────────────────────────────────────────────────────────
 st.markdown("""
@@ -202,26 +203,13 @@ body, p, span { color: #c7d2fe; }
 watermark_html = "<div class='watermark-bg'>" + ("<span>YOUR INSIGHTS</span>" * 120) + "</div>"
 st.markdown(watermark_html, unsafe_allow_html=True)
 
-#hide menu
 
-st.markdown("""
-<style>
-@media (max-width: 768px) {
-    button[data-testid="baseButton-secondary"] {
-        display: none !important;
-    }
-}
-</style>
-""", unsafe_allow_html=True)
 
-# ── Menu Button (Desktop ONLY) ────────────────────────
+# ── Menu Button (Desktop only) ────────────────────────
 if not is_mobile:
-    col1, col2 = st.columns([0.05, 0.95])
-
-    with col1:
-        if st.button("☰"):
-            st.session_state.show_sidebar = not st.session_state.show_sidebar
-            st.rerun()
+    if st.button("☰"):
+        st.session_state.show_sidebar = not st.session_state.show_sidebar
+        st.rerun()
 
 # ── Sidebar (Always On - Controlled by page_config) ─────────
 if "youtube_link" not in st.session_state:
