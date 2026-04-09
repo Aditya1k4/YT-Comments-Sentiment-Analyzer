@@ -10,11 +10,14 @@ from YoutubeCommentScrapper import (
 )
 
 # ── Page config ────────────────────────────────────────────────────────────────
+if "show_sidebar" not in st.session_state:
+    st.session_state.show_sidebar = True
+
 st.set_page_config(
     page_title='YT Sentiment Insights',
     page_icon='LOGO.png',
     layout='wide',
-    initial_sidebar_state='expanded',
+    initial_sidebar_state="expanded" if st.session_state.show_sidebar else "collapsed"
 )
 
 # ── Global CSS ─────────────────────────────────────────────────────────────────
@@ -194,15 +197,31 @@ body, p, span { color: #c7d2fe; }
 watermark_html = "<div class='watermark-bg'>" + ("<span>YOUR INSIGHTS</span>" * 120) + "</div>"
 st.markdown(watermark_html, unsafe_allow_html=True)
 
-# ── Sidebar ────────────────────────────────────────────────────────────────────
-st.sidebar.markdown("<h1>🎬 YT Sentiment</h1>", unsafe_allow_html=True)
-st.sidebar.markdown("<h2>Paste a YouTube Link</h2>", unsafe_allow_html=True)
-youtube_link = st.sidebar.text_input(
-    "YouTube URL",
-    placeholder="https://youtube.com/watch?v=...",
-    label_visibility="collapsed"
-)
+# ── Menu Button ─────────────────────────────────────────────
+col1, col2 = st.columns([0.05, 0.95])
 
+with col1:
+    if st.button("☰"):
+        st.session_state.show_sidebar = not st.session_state.show_sidebar
+        st.rerun()   # 🔥 THIS FIXES IT
+
+# ── Sidebar (Always On - Controlled by page_config) ─────────
+if "youtube_link" not in st.session_state:
+    st.session_state.youtube_link = ""
+
+with st.sidebar:
+    st.markdown("<h1>🎬 YT Sentiment</h1>", unsafe_allow_html=True)
+    st.markdown("<h2>Paste a YouTube Link</h2>", unsafe_allow_html=True)
+
+    st.session_state.youtube_link = st.text_input(
+        "YouTube URL",
+        value=st.session_state.youtube_link,
+        placeholder="https://youtube.com/watch?v=...",
+        label_visibility="collapsed"
+    )
+
+youtube_link = st.session_state.youtube_link
+    
 directory_path = os.getcwd()
 
 
