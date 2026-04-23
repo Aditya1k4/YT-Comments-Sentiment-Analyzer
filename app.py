@@ -19,7 +19,7 @@ if "show_sidebar" not in st.session_state:
     st.session_state.show_sidebar = True
 
 st.set_page_config(
-    page_title='YT Sentiment Insights',
+    page_title='Dinosights',
     page_icon='LOGO.png',
     layout='wide',
     initial_sidebar_state="expanded" if st.session_state.show_sidebar else "collapsed"
@@ -216,7 +216,7 @@ if "youtube_link" not in st.session_state:
     st.session_state.youtube_link = ""
 
 with st.sidebar:
-    st.markdown("<h1>🎬 YT Sentiment</h1>", unsafe_allow_html=True)
+    st.markdown("<h1>🎬 DinoSight</h1>", unsafe_allow_html=True)
     st.markdown("<h2>Paste a YouTube Link</h2>", unsafe_allow_html=True)
 
     st.session_state.youtube_link = st.text_input(
